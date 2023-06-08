@@ -14,3 +14,4 @@ Corresponding commands
 Red LED == Shake the arduino with at least total accel of 15
 Green LED == press left button also known as pin 5
 Blue LED == press right button also known as pin 4
+Doing the correct command within the alotted time grants a point.
