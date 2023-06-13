@@ -16,12 +16,12 @@ int green = (0,255,0);
 volatile int level = 1;
 volatile int score = 1;
 
-void right () {
+void right () { // when right button pressed switches the button state
   rightstate = 1;
   
 
   }
-void left (){
+void left (){ // when left button pressed switches the button state
   leftstate = 1;
 }
 void generateMIDI()
@@ -35,23 +35,23 @@ void generateMIDI()
 
 void setup() {
 CircuitPlayground.begin();
-attachInterrupt(digitalPinToInterrupt(rightbutton), right, CHANGE);
-attachInterrupt(digitalPinToInterrupt(leftbutton), left, CHANGE);
+attachInterrupt(digitalPinToInterrupt(rightbutton), right, CHANGE); // Interrupt for the right button pin to change to a different value
+attachInterrupt(digitalPinToInterrupt(leftbutton), left, CHANGE); // Interrupt for the left button pin to change to a different value
 Serial.begin(9600);
 generateMIDI();
 delay_count.start(500, AsyncDelay::MILLIS);
 }
 
 void loop() {
-  CircuitPlayground.playTone(440.00, 250);
+  CircuitPlayground.playTone(440.00, 250); // Plays a buzz sound to initiate start of game
   delay(1000);
-for (int i=0; i<3; i++) {
+for (int i=0; i<3; i++) { // sets the levels in first for loop
   level=i+1;
-  for (int i=0; i<4; i++) {
+  for (int i=0; i<4; i++) { // sets the stages in each level
     Serial.println(score);
-long rand = random(0,3);
+long rand = random(0,3); // Chooses a random number from 0 to 2
 switch (rand) {
-  case 0:
+  case 0: // First situation when light is red
   CircuitPlayground.setPixelColor(0,255,0,0);
   CircuitPlayground.setPixelColor(1,255,0,0);
   CircuitPlayground.setPixelColor(2,255,0,0);
@@ -62,12 +62,12 @@ switch (rand) {
   CircuitPlayground.setPixelColor(7,255,0,0);
   CircuitPlayground.setPixelColor(8,255,0,0);
   CircuitPlayground.setPixelColor(9,255,0,0);
-  delay(500/level);
+  delay(500/level); // duration of light
   CircuitPlayground.clearPixels();
-  delay(500/level);
+  delay(500/level); // duration of pause
   break;
   
-  case 1:
+  case 1: // second situation when light is green
   CircuitPlayground.setPixelColor(0,0,255,0);
   CircuitPlayground.setPixelColor(1,0,255,0);
   CircuitPlayground.setPixelColor(2,0,255,0);
@@ -78,9 +78,9 @@ switch (rand) {
   CircuitPlayground.setPixelColor(7,0,255,0);
   CircuitPlayground.setPixelColor(8,0,255,0);
   CircuitPlayground.setPixelColor(9,0,255,0);
-  delay(500/level);
+  delay(500/level); // duration of light
   CircuitPlayground.clearPixels();
-  delay(500/level);
+  delay(500/level); // duration of pause
   break;
 
   case 2:
@@ -94,9 +94,9 @@ switch (rand) {
   CircuitPlayground.setPixelColor(7,0,0,255);
   CircuitPlayground.setPixelColor(8,0,0,255);
   CircuitPlayground.setPixelColor(9,0,0,255);
-  delay(500/level);
+  delay(500/level); // duration of light
   CircuitPlayground.clearPixels();
-  delay(500/level);
+  delay(500/level); // duration of pause
   break;
 
 }
@@ -113,23 +113,23 @@ X = 0;
   Y /= 10;
   Z /= 10;
 
-  totalAccel = sqrt(X*X + Y*Y + Z*Z);
+  totalAccel = sqrt(X*X + Y*Y + Z*Z); // total accel of shake
 
-delay_count.repeat();
-if (rand ==2 && leftstate ==1) {
+delay_count.repeat(); //an unneeded chunk of code because i didn't end up using async delay
+if (rand ==2 && leftstate ==1) { // condition for if light is blue and press the right button
 
   score=score + 1;
 leftstate=0;
   CircuitPlayground.clearPixels();
 }
-if (rand == 1 && rightstate == 1) {
+if (rand == 1 && rightstate == 1) { // Condition for if light is green and press the left button
 
  score=score + 1;
 rightstate=0;
   CircuitPlayground.clearPixels();
 
 }
-if (rand == 0 && totalAccel >= 15) {
+if (rand == 0 && totalAccel >= 15) { // Condition for if light is red and arduino is shook greater than 15
 
 score=score + 1;
   CircuitPlayground.clearPixels();
@@ -139,10 +139,10 @@ score=score + 1;
 
 delay(3000);
   }
-  level= level+1;
+  level= level+1; // raises the level
 } 
 
-Serial.println(score);
+Serial.println(score); // next segment is brute force coding the score beep sounds using copy and paste to the max for 1-12 score.
 if (score ==1) {
   CircuitPlayground.playTone(midi[64], 200);
   delay(100);
@@ -483,5 +483,3 @@ CircuitPlayground.playTone(midi[64], 200);
 delay(10000);
 score=0;
 }
-
-
